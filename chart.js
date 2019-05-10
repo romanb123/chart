@@ -1,119 +1,203 @@
 
 window.onload = function () {
+	ajaxcall();
 
-var dataPoints1 = [];
-var dataPoints2 = [];
-var dataPoints3 = [];
+	// ajax function
+	var coins_array = ["ETH", "ZEC", "ZEC", "ZEC", "ZEC"];
+	var validname_arr = [];
+	var validvalue_arr = [];
+	startvalue_arr = [];
+	function ajaxcall() {
+		$.ajax({
+			url:
+				"https://min-api.cryptocompare.com/data/pricemulti?fsyms=" +
+				coins_array +
+				"&tsyms=USD",
+			success: function (result) {
+				coins_object = result;
+				// chart:
+				for (let index = 0; index < 5; index++) {
+					if (coins_object[coins_array[index]] == undefined) {
+						validname_arr[index] = "no data";
+						validvalue_arr[index] = 0;
 
-var options = {
-	title: {
-		text: "Electricity Generation in Turbine"
-	},
-	axisX: {
-		title: "chart updates every 2 secs"
-	},
-	axisY: {
-		suffix: "Wh",
-		includeZero: false
-	},
-	toolTip: {
-		shared: true
-	},
-	legend: {
-		cursor: "pointer",
-		verticalAlign: "top",
-		fontSize: 22,
-		fontColor: "dimGrey",
-		itemclick: toggleDataSeries
-	},
-	data: [{
-		type: "line",
-		xValueType: "dateTime",
-		yValueFormatString: "###.00Wh",
-		xValueFormatString: "hh:mm:ss TT",
-		showInLegend: true,
-		name: "Turbine 1",
-		dataPoints: dataPoints1
-	},
-	{
-		type: "line",
-		xValueType: "dateTime",
-		yValueFormatString: "###.00Wh",
-		showInLegend: true,
-		name: "Turbine 2",
-		dataPoints: dataPoints2
-	}, {
-		type: "line",
-		xValueType: "dateTime",
-		yValueFormatString: "###.00Wh",
-		showInLegend: true,
-		name: "Turbine 2",
-		dataPoints: dataPoints3
-	}]
-};
+					}
+					else {
+						validname_arr[index] = coins_array[index];
+						validvalue_arr[index] = coins_object[coins_array[index]].USD;
 
-var chart = $("#chartContainer").CanvasJSChart(options);
+					}
+				}
+				console.log(validname_arr);
+				console.log(validvalue_arr)
 
-function toggleDataSeries(e) {
-	if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-		e.dataSeries.visible = false;
-	}
-	else {
-		e.dataSeries.visible = true;
-	}
-	e.chart.render();
-}
-
-var updateInterval = 2000;
-// initial value
-var yValue1 = 2;
-var yValue2 = 3;
-var yValue3 = 4;
-
-var time = new Date;
-// starting at 10.00 am
-time.setHours(10);
-time.setMinutes(00);
-time.setSeconds(00);
-time.setMilliseconds(00);
-
-function updateChart(count) {
-	count = count || 1;
-	var deltaY1, deltaY2, deltaY3;
-	for (var i = 0; i < count; i++) {
-		time.setTime(time.getTime() + updateInterval);
-		deltaY1 = -1 + Math.random() * (1 + 1);
-		deltaY2 = -1 + Math.random() * (1 + 1);
-		deltaY3 = -1 + Math.random() * (1 + 1);
-
-		// adding random value and rounding it to two digits. 
-		yValue1 = Math.round((yValue1 + deltaY1) * 100) / 100;
-		yValue2 = Math.round((yValue2 + deltaY2) * 100) / 100;
-		yValue3 = Math.round((yValue3 + deltaY3) * 100) / 100;
-
-		// pushing the new values
-		dataPoints1.push({
-			x: time.getTime(),
-			y: yValue1
-		});
-		dataPoints2.push({
-			x: time.getTime(),
-			y: yValue2
-		});
-		dataPoints3.push({
-			x: time.getTime(),
-			y: yValue3
+			},
 		});
 	}
 
-	// updating legend text with  updated with y Value 
-	options.data[0].legendText = "Turbine 1 : " + yValue1 + "Wh";
-	options.data[1].legendText = "Turbine 2 : " + yValue2 + "Wh";
-	options.data[2].legendText = "Turbine 3 : " + yValue3 + "Wh";
-	$("#chartContainer").CanvasJSChart().render();
-}
-// generates first set of dataPoints 
-updateChart(100);
-setInterval(function () { updateChart() }, updateInterval);
+	setInterval(ajaxcall, 2000);
+
+
+
+
+
+
+
+
+
+
+
+
+	// chart function
+	var dataPoints1 = [];
+	var dataPoints2 = [];
+	var dataPoints3 = [];
+	var dataPoints4 = [];
+	var dataPoints5 = [];
+
+	var options = {
+		title: {
+			text: "Electricity Generation in Turbine"
+		},
+		axisX: {
+			title: "chart updates every 2 secs"
+		},
+		axisY: {
+			suffix: "Wh",
+			includeZero: false
+		},
+		toolTip: {
+			shared: true
+		},
+		legend: {
+			cursor: "pointer",
+			verticalAlign: "top",
+			fontSize: 22,
+			fontColor: "dimGrey",
+			itemclick: toggleDataSeries
+		},
+		data: [{
+			type: "line",
+			xValueType: "dateTime",
+			yValueFormatString: "###.00Wh",
+			xValueFormatString: "hh:mm:ss TT",
+			showInLegend: true,
+			name: validname_arr[0],
+			dataPoints: dataPoints1
+		},
+		{
+			type: "line",
+			xValueType: "dateTime",
+			yValueFormatString: "###.00Wh",
+			showInLegend: true,
+			name: validname_arr[1],
+			dataPoints: dataPoints2
+		},
+		{
+			type: "line",
+			xValueType: "dateTime",
+			yValueFormatString: "###.00Wh",
+			showInLegend: true,
+			name: validname_arr[2],
+			dataPoints: dataPoints3
+		},
+		{
+			type: "line",
+			xValueType: "dateTime",
+			yValueFormatString: "###.00Wh",
+			showInLegend: true,
+			name: validname_arr[3],
+			dataPoints: dataPoints4
+		},
+		{
+			type: "line",
+			xValueType: "dateTime",
+			yValueFormatString: "###.00Wh",
+			showInLegend: true,
+			name: validname_arr[4],
+			dataPoints: dataPoints5
+		}
+		]
+	};
+
+	var chart = $("#chartContainer").CanvasJSChart(options);
+
+	function toggleDataSeries(e) {
+		if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+			e.dataSeries.visible = false;
+		}
+		else {
+			e.dataSeries.visible = true;
+		}
+		e.chart.render();
+	}
+
+	var updateInterval = 2000;
+	// initial value
+	var yValue1 = validvalue_arr[0];
+	var yValue2 = validvalue_arr[1];
+	var yValue3 = validvalue_arr[2];
+	var yValue4 = validvalue_arr[3];
+	var yValue5 = validvalue_arr[4];
+
+	var time = new Date;
+	// starting at 10.00 am
+	time.getHours();
+	time.getMinutes();
+	time.getSeconds();
+	time.getMilliseconds();
+
+	function updateChart(count) {
+		count = count || 1;
+		var deltaY1, deltaY2, deltaY3, deltaY4, deltaY5;
+		for (var i = 0; i < count; i++) {
+			time.setTime(time.getTime() + updateInterval);
+			deltaY1 = 0;
+			deltaY2 = 0;
+			deltaY3 = 0;
+			deltaY4 = 0;
+			deltaY5 = 0;
+
+			// adding random value and rounding it to two digits. 
+			yValue1 = validvalue_arr[0];
+			yValue2 = validvalue_arr[1];
+			yValue3 = validvalue_arr[2];
+			yValue4 = validvalue_arr[3];
+			yValue4 = validvalue_arr[4];
+
+			// pushing the new values
+			dataPoints1.push({
+				x: time.getTime(),
+				y: yValue1
+			});
+			dataPoints2.push({
+				x: time.getTime(),
+				y: yValue2
+			});
+			dataPoints3.push({
+				x: time.getTime(),
+				y: yValue3
+			});
+			dataPoints4.push({
+				x: time.getTime(),
+				y: yValue4
+			});
+			dataPoints5.push({
+				x: time.getTime(),
+				y: yValue5
+			});
+		}
+
+		// updating legend text with  updated with y Value 
+		options.data[0].legendText = "Turbine 1 : " + "yValue1" + "Wh";
+		options.data[1].legendText = "Turbine 2 : " + yValue2 + "Wh";
+		options.data[2].legendText = "Turbine 3 : " + yValue3 + "Wh";
+		options.data[3].legendText = "Turbine 3 : " + yValue3 + "Wh";
+		options.data[4].legendText = "Turbine 3 : " + yValue3 + "Wh";
+		$("#chartContainer").CanvasJSChart().render();
+	}
+	// generates first set of dataPoints 
+	updateChart(1);
+	setInterval(function () { updateChart() }, updateInterval);
 
 }

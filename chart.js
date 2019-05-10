@@ -1,12 +1,17 @@
-
+var coins_array = ["ETH", "ZEC", "USD", "ZEC", "USD"];
+var validname_arr = [];
+var validvalue_arr = [];
+var dataPoints1 = [];
+var dataPoints2 = [];
+var dataPoints3 = [];
+var dataPoints4 = [];
+var dataPoints5 = [];
+var options = {};
 window.onload = function () {
 	ajaxcall();
 
 	// ajax function
-	var coins_array = ["ETH", "ZEC", "ZEC", "ZEC", "ZEC"];
-	var validname_arr = [];
-	var validvalue_arr = [];
-	startvalue_arr = [];
+
 	function ajaxcall() {
 		$.ajax({
 			url:
@@ -19,17 +24,18 @@ window.onload = function () {
 				for (let index = 0; index < 5; index++) {
 					if (coins_object[coins_array[index]] == undefined) {
 						validname_arr[index] = "no data";
+						options.data[index].name = "no data";
 						validvalue_arr[index] = 0;
-
 					}
 					else {
 						validname_arr[index] = coins_array[index];
+						options.data[index].name = coins_array[index];
 						validvalue_arr[index] = coins_object[coins_array[index]].USD;
-
 					}
 				}
 				console.log(validname_arr);
-				console.log(validvalue_arr)
+				console.log(validvalue_arr);
+				console.log(options.data);
 
 			},
 		});
@@ -48,14 +54,12 @@ window.onload = function () {
 
 
 
-	// chart function
-	var dataPoints1 = [];
-	var dataPoints2 = [];
-	var dataPoints3 = [];
-	var dataPoints4 = [];
-	var dataPoints5 = [];
 
-	var options = {
+
+	// chart function
+
+
+	options = {
 		title: {
 			text: "Electricity Generation in Turbine"
 		},
@@ -149,22 +153,16 @@ window.onload = function () {
 
 	function updateChart(count) {
 		count = count || 1;
-		var deltaY1, deltaY2, deltaY3, deltaY4, deltaY5;
 		for (var i = 0; i < count; i++) {
 			time.setTime(time.getTime() + updateInterval);
-			deltaY1 = 0;
-			deltaY2 = 0;
-			deltaY3 = 0;
-			deltaY4 = 0;
-			deltaY5 = 0;
+
 
 			// adding random value and rounding it to two digits. 
 			yValue1 = validvalue_arr[0];
 			yValue2 = validvalue_arr[1];
 			yValue3 = validvalue_arr[2];
 			yValue4 = validvalue_arr[3];
-			yValue4 = validvalue_arr[4];
-
+			yValue5 = validvalue_arr[4];
 			// pushing the new values
 			dataPoints1.push({
 				x: time.getTime(),
@@ -189,11 +187,11 @@ window.onload = function () {
 		}
 
 		// updating legend text with  updated with y Value 
-		options.data[0].legendText = "Turbine 1 : " + "yValue1" + "Wh";
-		options.data[1].legendText = "Turbine 2 : " + yValue2 + "Wh";
-		options.data[2].legendText = "Turbine 3 : " + yValue3 + "Wh";
-		options.data[3].legendText = "Turbine 3 : " + yValue3 + "Wh";
-		options.data[4].legendText = "Turbine 3 : " + yValue3 + "Wh";
+		options.data[0].legendText = validname_arr[0] + yValue1 + "$";
+		options.data[1].legendText = validname_arr[1] + yValue2 + "$";
+		options.data[2].legendText = validname_arr[2] + yValue3 + "$";
+		options.data[3].legendText = validname_arr[3] + yValue4 + "$";
+		options.data[4].legendText = validname_arr[4] + yValue5 + "$";
 		$("#chartContainer").CanvasJSChart().render();
 	}
 	// generates first set of dataPoints 

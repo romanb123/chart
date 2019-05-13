@@ -1,18 +1,25 @@
 var coins_array = ["ETH", "ZEC", "USD", "ZEC", "USD"];
 var validname_arr = [];
 var validvalue_arr = [];
-var dataPoints1 = [];
-var dataPoints2 = [];
-var dataPoints3 = [];
-var dataPoints4 = [];
-var dataPoints5 = [];
-var options = {};
+
+
+// chart function
+
+
+
 window.onload = function () {
-	ajaxcall();
 
-	// ajax function
+	var dataPoints1 = [];
+	var dataPoints2 = [];
+	var dataPoints3 = [];
+	var dataPoints4 = [];
+	var dataPoints5 = [];
+	var options = {};
 
+
+	// ajaxcall
 	function ajaxcall() {
+
 		$.ajax({
 			url:
 				"https://min-api.cryptocompare.com/data/pricemulti?fsyms=" +
@@ -44,21 +51,7 @@ window.onload = function () {
 	setInterval(ajaxcall, 2000);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 	// chart function
-
-
 	options = {
 		title: {
 			text: "Electricity Generation in Turbine"
